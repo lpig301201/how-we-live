@@ -1,0 +1,563 @@
+<!doctype html>
+<html lang="zh-Hant">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="description" content="我們如何活著｜一張用電影探索世界、關係、自我、記憶與存在的人生地圖。">
+  <title>我們如何活著｜電影 × 人生地圖</title>
+<style>
+
+:root{
+  --bg:#f6f3ec;
+  --paper:#fffdf8;
+  --ink:#1e211f;
+  --muted:#6d746f;
+  --line:#d9ddd7;
+  --accent:#415a4c;
+  --accent-soft:#e7eee9;
+  --shadow:0 10px 30px rgba(33,42,36,.08);
+}
+*{box-sizing:border-box}
+html{scroll-behavior:smooth}
+body{
+  margin:0;
+  font-family:system-ui,-apple-system,BlinkMacSystemFont,"Segoe UI","Noto Sans TC","PingFang TC",sans-serif;
+  color:var(--ink);
+  background:var(--bg);
+}
+button,input,select{font:inherit}
+button{cursor:pointer}
+.wrap{width:min(1120px,calc(100% - 32px));margin:auto}
+.hero{
+  padding:88px 0 64px;
+  background:
+    radial-gradient(circle at 20% 20%, rgba(65,90,76,.14), transparent 34%),
+    linear-gradient(180deg,#fbfaf6 0%,#f6f3ec 100%);
+  border-bottom:1px solid var(--line);
+}
+.eyebrow{letter-spacing:.16em;font-size:.78rem;color:var(--accent);font-weight:700;margin:0 0 10px}
+h1{font-size:clamp(2.7rem,7vw,5.8rem);line-height:.95;margin:0 0 18px;font-weight:800;letter-spacing:-.04em}
+.subtitle{max-width:720px;font-size:1.15rem;color:var(--muted);line-height:1.8}
+.hero-actions{display:flex;gap:12px;flex-wrap:wrap;margin-top:28px}
+.hero-actions button,.hero-actions a{
+  border:1px solid var(--accent);
+  border-radius:999px;
+  padding:11px 18px;
+  text-decoration:none;
+}
+.hero-actions button{background:var(--accent);color:white}
+.hero-actions a{color:var(--accent)}
+main{padding:40px 0 72px}
+.toolbar{
+  display:grid;
+  grid-template-columns:1.4fr .8fr;
+  gap:16px;
+  margin-bottom:46px;
+}
+label{display:grid;gap:8px;font-weight:700}
+input,select{
+  width:100%;
+  border:1px solid var(--line);
+  background:var(--paper);
+  padding:13px 14px;
+  border-radius:14px;
+  outline:none;
+}
+input:focus,select:focus{border-color:var(--accent);box-shadow:0 0 0 3px rgba(65,90,76,.12)}
+.section-heading{
+  display:flex;
+  justify-content:space-between;
+  gap:20px;
+  align-items:end;
+  margin:0 0 18px;
+}
+.section-heading h2{margin:0;font-size:1.8rem}
+.section-heading>p{margin:0;color:var(--muted);max-width:420px;text-align:right}
+.zone-grid{
+  display:grid;
+  grid-template-columns:repeat(4,1fr);
+  gap:14px;
+}
+.zone-card{
+  border:1px solid var(--line);
+  background:var(--paper);
+  border-radius:18px;
+  padding:18px;
+  min-height:160px;
+  box-shadow:var(--shadow);
+  transition:.2s ease;
+}
+.zone-card:hover{transform:translateY(-2px);border-color:var(--accent)}
+.zone-card button{
+  all:unset;
+  cursor:pointer;
+  display:block;
+  width:100%;
+  height:100%;
+}
+.zone-icon{font-size:1.8rem}
+.zone-card h3{margin:16px 0 8px}
+.zone-card p{margin:0;color:var(--muted);line-height:1.55;font-size:.92rem}
+.map-section{margin:52px 0}
+.network{
+  position:relative;
+  min-height:400px;
+  border:1px solid var(--line);
+  border-radius:22px;
+  background:
+    radial-gradient(circle at center, rgba(65,90,76,.08), transparent 42%),
+    var(--paper);
+  overflow:hidden;
+}
+.network-inner{
+  display:grid;
+  grid-template-columns:repeat(4,1fr);
+  gap:12px;
+  padding:22px;
+}
+.tag-node{
+  border:1px solid var(--line);
+  background:var(--accent-soft);
+  border-radius:999px;
+  padding:9px 12px;
+  text-align:center;
+  font-size:.9rem;
+}
+.movie-node{
+  grid-column:span 2;
+  border:1px solid var(--accent);
+  border-radius:16px;
+  padding:16px;
+  background:var(--paper);
+}
+.movie-node strong{display:block;margin-bottom:6px}
+.movie-node small{color:var(--muted)}
+.movie-grid{
+  display:grid;
+  grid-template-columns:repeat(3,1fr);
+  gap:16px;
+}
+.movie-card{
+  background:var(--paper);
+  border:1px solid var(--line);
+  border-radius:18px;
+  padding:18px;
+  box-shadow:var(--shadow);
+  transition:.2s ease;
+}
+.movie-card:hover{transform:translateY(-2px)}
+.movie-card button{
+  all:unset;
+  cursor:pointer;
+  display:block;
+  width:100%;
+}
+.movie-card h3{margin:0 0 6px;font-size:1.15rem}
+.movie-card .year{color:var(--muted);font-size:.9rem;margin-bottom:12px}
+.chips{display:flex;gap:7px;flex-wrap:wrap}
+.chip{
+  display:inline-flex;
+  padding:6px 9px;
+  border-radius:999px;
+  background:var(--accent-soft);
+  color:var(--accent);
+  font-size:.78rem;
+}
+.empty{
+  grid-column:1/-1;
+  padding:42px;
+  text-align:center;
+  color:var(--muted);
+  border:1px dashed var(--line);
+  border-radius:18px;
+}
+dialog{
+  width:min(620px,calc(100% - 28px));
+  border:0;
+  border-radius:22px;
+  padding:26px;
+  background:var(--paper);
+  color:var(--ink);
+  box-shadow:0 30px 80px rgba(0,0,0,.25);
+}
+dialog::backdrop{background:rgba(17,22,19,.48)}
+.dialog-close{
+  position:absolute;
+  top:12px;right:14px;
+  border:0;background:transparent;
+  font-size:1.8rem;color:var(--muted)
+}
+.dialog-title{margin:4px 0 4px;font-size:1.7rem}
+.dialog-meta{color:var(--muted);margin:0 0 18px}
+.dialog-block{margin-top:20px}
+.dialog-block h4{margin:0 0 8px}
+footer{
+  padding:36px 0 54px;
+  border-top:1px solid var(--line);
+  background:#efede6;
+  color:var(--muted);
+  text-align:center;
+}
+footer strong{display:block;margin-top:6px;color:var(--ink)}
+@media (max-width:850px){
+  .zone-grid{grid-template-columns:repeat(2,1fr)}
+  .movie-grid{grid-template-columns:repeat(2,1fr)}
+  .network-inner{grid-template-columns:repeat(2,1fr)}
+}
+@media (max-width:620px){
+  .hero{padding-top:62px}
+  .toolbar{grid-template-columns:1fr}
+  .zone-grid,.movie-grid,.network-inner{grid-template-columns:1fr}
+  .movie-node{grid-column:span 1}
+  .section-heading{align-items:start;flex-direction:column}
+  .section-heading>p{text-align:left}
+}
+
+
+/* --- Film Forest chapter cards --- */
+.zone-card{
+  padding:0;
+  min-height:300px;
+  background:rgba(255,253,248,.96);
+}
+.zone-card::after{display:none}
+.zone-card button{display:block}
+.zone-cover{
+  position:relative;
+  width:100%;
+  aspect-ratio:3/2;
+  overflow:hidden;
+  background:var(--accent-soft);
+}
+.zone-cover::after{
+  content:"";
+  position:absolute;
+  inset:0;
+  background:linear-gradient(180deg,rgba(21,30,26,0) 45%,rgba(21,30,26,.22) 100%);
+}
+.zone-cover img{
+  display:block;
+  width:100%;
+  height:100%;
+  object-fit:cover;
+  transition:transform .45s ease, filter .45s ease;
+}
+.zone-card:hover .zone-cover img{
+  transform:scale(1.045);
+  filter:saturate(1.05);
+}
+.zone-cover .zone-icon{
+  position:absolute;
+  z-index:2;
+  left:14px;
+  top:14px;
+  display:grid;
+  place-items:center;
+  width:42px;
+  height:42px;
+  border-radius:13px;
+  border:1px solid rgba(255,255,255,.58);
+  background:rgba(255,253,248,.84);
+  backdrop-filter:blur(8px);
+  box-shadow:0 8px 18px rgba(0,0,0,.12);
+  font-size:1.35rem;
+}
+.zone-content{padding:18px 18px 20px}
+.zone-card h3{
+  margin:0 0 8px;
+  font-family:Georgia,"Times New Roman","Noto Serif TC",serif;
+  font-size:1.15rem;
+}
+.zone-card p{font-size:.86rem}
+.zone-card .zone-count{
+  display:inline-flex;
+  margin-top:15px;
+  padding:6px 9px;
+  border-radius:999px;
+  background:var(--accent-soft);
+  color:var(--accent);
+  font-size:.78rem;
+  font-weight:700;
+}
+.section-heading{position:relative}
+.section-heading::after{
+  content:"";
+  position:absolute;
+  left:0;
+  bottom:-10px;
+  width:54px;
+  height:2px;
+  background:linear-gradient(90deg,var(--accent),transparent);
+}
+.movie-card:nth-child(4n+2)::before{background:linear-gradient(180deg,#7b684a,rgba(123,104,74,.18))}
+.movie-card:nth-child(4n+3)::before{background:linear-gradient(180deg,#526d78,rgba(82,109,120,.18))}
+.movie-card:nth-child(4n+4)::before{background:linear-gradient(180deg,#76596d,rgba(118,89,109,.18))}
+@media (max-width:640px){
+  .zone-card{min-height:0}
+}
+
+</style>
+</head>
+<body>
+  <header class="hero">
+    <div class="hero-deco hero-deco-moon" aria-hidden="true"></div>
+    <div class="wrap hero-layout">
+      <div class="hero-copy">
+        <p class="eyebrow">MOVIE × LIFE MAP</p>
+        <h1>我們如何活著</h1>
+        <p class="subtitle">不是把電影塞進分類，而是看每部電影在人生的哪些地方留下座標。從世界、族群、關係與愛情，一路走向自我、記憶、存在與表達。</p>
+        <div class="hero-note"><span>🌲 8 大人生區域</span><span>🎬 50+ 電影座標</span><span>🔗 多重交叉連線</span></div>
+        <p style="margin-top:22px;color:rgba(248,242,230,.72);font-family:Georgia,'Noto Serif TC',serif;font-style:italic;">電影森林，是我們用故事理解人生的方法。</p>
+        <div class="hero-actions">
+          <button id="showAllBtn">探索整座森林</button>
+          <a href="#explore">開始探索</a>
+        </div>
+      </div>
+      <figure class="hero-art">
+        <img src="hero-cinema-illustration.jpg" alt="坐在導演椅上眺望遠方的觀影者與老式電影放映機插圖">
+        <figcaption>一部電影，一個提問；一段屬於自己的生命旅程。</figcaption>
+      </figure>
+    </div>
+  </header>
+
+  <main class="wrap site-main" id="explore"><div class="floating-filmstrip" aria-hidden="true"></div>
+    <section class="toolbar">
+      <label>
+        搜尋電影
+        <input id="searchInput" type="search" placeholder="例如：千年女優、星際效應、罪人…">
+      </label>
+      <label>
+        篩選區域
+        <select id="zoneSelect">
+          <option value="all">全部區域</option>
+        </select>
+      </label>
+    </section>
+
+    <section>
+      <div class="section-heading">
+        <div>
+          <p class="eyebrow">LIFE AREAS</p>
+          <h2>八大人生區域</h2>
+        </div>
+        <p>點一個區域，只看與它相關的電影。</p>
+      </div>
+      <div id="zoneGrid" class="zone-grid"></div>
+    </section>
+
+    <section class="map-section">
+      <div class="section-heading">
+        <div>
+          <p class="eyebrow">CONNECTION MAP</p>
+          <h2>電影關聯地圖</h2>
+        </div>
+        <p>同一部電影可以跨越多個人生面向。</p>
+      </div>
+      <div id="network" class="network" aria-live="polite"></div>
+    </section>
+
+    <section>
+      <div class="section-heading">
+        <div>
+          <p class="eyebrow">MOVIES</p>
+          <h2>電影座標</h2>
+        </div>
+        <p id="resultCount"></p>
+      </div>
+      <div id="movieGrid" class="movie-grid"></div>
+    </section>
+  </main>
+
+  <dialog id="movieDialog">
+    <button class="dialog-close" id="dialogClose" aria-label="關閉">×</button>
+    <div id="dialogContent"></div>
+  </dialog>
+
+  <footer>
+    <div class="wrap">
+      <p>世界 → 我們 → 他人 → 愛情 → 自我 → 記憶 → 存在 → 表達</p>
+      <strong>所有枝條最後，都可能重新交會在同一個問題：我們要如何活著？</strong>
+    </div>
+  </footer>
+<script>
+
+const DATA = {"zones": [{"name": "世界與時代", "icon": "🌍", "tags": ["戰爭・時代・個人", "社會・制度・權力"]}, {"name": "族群與文化", "icon": "✊", "tags": ["壓迫・制度・凝視", "抗爭・政治・解放", "偏見・理解・共處", "文化・記憶・傳承", "認同・離散・歷史"]}, {"name": "人與關係", "icon": "🤝", "tags": ["家庭・親情・世代", "友情・陪伴・連結"]}, {"name": "愛情", "icon": "💕", "tags": ["相遇・心動", "相愛・相處", "改變・分岔", "錯過・未完成"]}, {"name": "自我與人生", "icon": "🪞", "tags": ["自由・選擇・人生道路", "迷惘・創傷・自我懷疑", "身分・角色・命運", "夢想・成就・失敗"]}, {"name": "記憶與生命", "icon": "🌙", "tags": ["記憶・時間・生命", "死亡・失去・告別", "青春・成長・離開"]}, {"name": "存在與未知", "icon": "🌌", "tags": ["存在・荒謬・哲學", "時間・空間・愛", "現實・認知・自我", "日常・平凡・活著"]}, {"name": "藝術與表達", "icon": "🎭", "tags": ["音樂・歌舞・情感", "創作・藝術・生命"]}], "movies": [{"title": "拆彈少年", "year": 2015, "tags": ["戰爭・時代・個人"], "themes": ["戰爭", "責任", "少年"]}, {"title": "兔嘲男孩", "year": 2019, "tags": ["戰爭・時代・個人"], "themes": ["戰爭", "意識形態", "成長"]}, {"title": "霸王別姬", "year": 1993, "tags": ["戰爭・時代・個人", "身分・角色・命運", "創作・藝術・生命"], "themes": ["時代", "身分", "藝術", "愛", "命運"]}, {"title": "發條橘子", "year": 1971, "tags": ["社會・制度・權力", "存在・荒謬・哲學"], "themes": ["自由意志", "制度", "道德"]}, {"title": "單身動物園", "year": 2015, "tags": ["社會・制度・權力", "存在・荒謬・哲學"], "themes": ["規訓", "愛情", "荒謬"]}, {"title": "抱歉打擾你", "year": 2018, "tags": ["社會・制度・權力"], "themes": ["資本", "勞動", "荒謬"]}, {"title": "可憐的東西", "year": 2023, "tags": ["社會・制度・權力", "身分・角色・命運", "存在・荒謬・哲學"], "themes": ["自由", "身分", "規訓", "成長"]}, {"title": "猶大與黑色彌賽亞", "year": 2021, "tags": ["壓迫・制度・凝視", "抗爭・政治・解放"], "themes": ["族群", "抗爭", "政治", "背叛"]}, {"title": "幸福綠皮書", "year": 2018, "tags": ["偏見・理解・共處"], "themes": ["族群", "偏見", "理解"]}, {"title": "罪人", "year": 2025, "tags": ["文化・記憶・傳承", "音樂・歌舞・情感"], "themes": ["黑人文化", "音樂", "歷史", "恐懼"]}, {"title": "黑豹", "year": 2018, "tags": ["認同・離散・歷史"], "themes": ["族群", "離散", "歷史", "認同"]}, {"title": "月光下的藍色男孩", "year": 2016, "tags": ["認同・離散・歷史"], "themes": ["族群", "男性氣質", "身分", "親密"]}, {"title": "逃出絕命鎮", "year": 2017, "tags": ["壓迫・制度・凝視"], "themes": ["族群", "凝視", "恐怖", "身體"]}, {"title": "為所應為", "year": 1989, "tags": ["抗爭・政治・解放"], "themes": ["族群", "社區", "抗爭"]}, {"title": "Daughters of the Dust", "year": 1991, "tags": ["文化・記憶・傳承", "認同・離散・歷史"], "themes": ["祖先", "女性", "記憶", "傳承"]}, {"title": "藍調天后", "year": 2020, "tags": ["文化・記憶・傳承", "創作・藝術・生命"], "themes": ["藍調", "文化", "資本", "創作"]}, {"title": "東京物語", "year": 1953, "tags": ["家庭・親情・世代", "日常・平凡・活著"], "themes": ["家庭", "老去", "世代"]}, {"title": "海街日記", "year": 2015, "tags": ["家庭・親情・世代", "日常・平凡・活著"], "themes": ["家庭", "日常", "療癒"]}, {"title": "橫山家之味", "year": 2008, "tags": ["家庭・親情・世代", "日常・平凡・活著"], "themes": ["家庭", "失去", "日常"]}, {"title": "星際效應", "year": 2014, "tags": ["家庭・親情・世代", "時間・空間・愛"], "themes": ["親情", "時間", "空間", "存在"]}, {"title": "再見機器人", "year": 2023, "tags": ["友情・陪伴・連結", "記憶・時間・生命"], "themes": ["陪伴", "告別", "記憶"]}, {"title": "橫道世之介", "year": 2013, "tags": ["友情・陪伴・連結", "青春・成長・離開"], "themes": ["青春", "友情", "留下"]}, {"title": "新娘百分百", "year": 1999, "tags": ["相遇・心動"], "themes": ["愛情", "相遇", "身分差距"]}, {"title": "電子情書", "year": 1998, "tags": ["相遇・心動"], "themes": ["愛情", "網路", "身分"]}, {"title": "愛在黎明破曉時", "year": 1995, "tags": ["相遇・心動", "錯過・未完成"], "themes": ["愛情", "相遇", "時間"]}, {"title": "愛在日落巴黎時", "year": 2004, "tags": ["相愛・相處"], "themes": ["愛情", "相處", "時間"]}, {"title": "真愛每一天", "year": 2013, "tags": ["相愛・相處"], "themes": ["愛情", "家庭", "時間"]}, {"title": "婚姻故事", "year": 2019, "tags": ["相愛・相處"], "themes": ["婚姻", "愛", "分離"]}, {"title": "花束般的戀愛", "year": 2021, "tags": ["改變・分岔"], "themes": ["愛情", "改變", "日常"]}, {"title": "樂來越愛你", "year": 2016, "tags": ["改變・分岔", "夢想・成就・失敗"], "themes": ["愛情", "夢想", "錯過"]}, {"title": "藍色情人節", "year": 2010, "tags": ["改變・分岔"], "themes": ["愛情", "關係", "崩解"]}, {"title": "花樣年華", "year": 2000, "tags": ["錯過・未完成"], "themes": ["愛情", "錯過", "時間"]}, {"title": "之前的我們", "year": 2023, "tags": ["錯過・未完成", "記憶・時間・生命"], "themes": ["愛情", "如果", "記憶"]}, {"title": "海上鋼琴師", "year": 1998, "tags": ["自由・選擇・人生道路", "存在・荒謬・哲學"], "themes": ["自由", "邊界", "選擇"]}, {"title": "刺激1995", "year": 1994, "tags": ["自由・選擇・人生道路"], "themes": ["希望", "自由", "重新開始"]}, {"title": "紅豬", "year": 1992, "tags": ["迷惘・創傷・自我懷疑"], "themes": ["迷惘", "創傷", "自我"]}, {"title": "白日夢冒險王", "year": 2013, "tags": ["迷惘・創傷・自我懷疑"], "themes": ["迷惘", "勇氣", "人生"]}, {"title": "海邊的曼徹斯特", "year": 2016, "tags": ["迷惘・創傷・自我懷疑", "死亡・失去・告別"], "themes": ["創傷", "失去", "繼續生活"]}, {"title": "靈魂急轉彎", "year": 2020, "tags": ["迷惘・創傷・自我懷疑"], "themes": ["人生意義", "日常", "存在"]}, {"title": "藍色恐懼", "year": 1997, "tags": ["身分・角色・命運", "現實・認知・自我"], "themes": ["身分", "現實", "凝視"]}, {"title": "進擊的鼓手", "year": 2014, "tags": ["夢想・成就・失敗", "創作・藝術・生命"], "themes": ["夢想", "執念", "成就"]}, {"title": "醉鄉民謠", "year": 2013, "tags": ["夢想・成就・失敗", "創作・藝術・生命"], "themes": ["創作", "失敗", "孤獨"]}, {"title": "情書", "year": 1995, "tags": ["記憶・時間・生命"], "themes": ["回望", "記憶", "失去"]}, {"title": "千年女優", "year": 2001, "tags": ["記憶・時間・生命", "創作・藝術・生命"], "themes": ["追尋", "記憶", "電影", "生命"]}, {"title": "下一站，天國", "year": 1998, "tags": ["記憶・時間・生命"], "themes": ["記憶", "死亡", "生命"]}, {"title": "送行者", "year": 2008, "tags": ["死亡・失去・告別"], "themes": ["死亡", "告別", "尊嚴"]}, {"title": "可可夜總會", "year": 2017, "tags": ["死亡・失去・告別"], "themes": ["死亡", "記憶", "家族"]}, {"title": "青春電幻物語", "year": 2001, "tags": ["青春・成長・離開"], "themes": ["青春", "疏離", "成長"]}, {"title": "淑女鳥", "year": 2017, "tags": ["青春・成長・離開"], "themes": ["青春", "家庭", "離開"]}, {"title": "媽的多重宇宙", "year": 2022, "tags": ["存在・荒謬・哲學"], "themes": ["存在", "多重宇宙", "選擇"]}, {"title": "異星入境", "year": 2016, "tags": ["時間・空間・愛"], "themes": ["時間", "語言", "選擇", "愛"]}, {"title": "你的名字", "year": 2016, "tags": ["時間・空間・愛"], "themes": ["時間", "記憶", "連結"]}, {"title": "盜夢偵探", "year": 2006, "tags": ["現實・認知・自我"], "themes": ["夢境", "現實", "自我"]}, {"title": "全面啟動", "year": 2010, "tags": ["現實・認知・自我"], "themes": ["夢境", "現實", "記憶"]}, {"title": "我的完美日常", "year": 2023, "tags": ["日常・平凡・活著"], "themes": ["日常", "平凡", "生命"]}, {"title": "萬花嬉春", "year": 1952, "tags": ["音樂・歌舞・情感"], "themes": ["歌舞", "電影", "快樂"]}, {"title": "Once", "year": 2007, "tags": ["音樂・歌舞・情感"], "themes": ["音樂", "相遇", "創作"]}, {"title": "曼哈頓戀習曲", "year": 2013, "tags": ["音樂・歌舞・情感"], "themes": ["音樂", "療癒", "重新開始"]}]};
+let selectedZone = "all";
+function init(){
+  const zoneSelect = document.getElementById("zoneSelect");
+  DATA.zones.forEach(z => {
+    const o = document.createElement("option");
+    o.value = z.name;
+    o.textContent = `${z.icon} ${z.name}`;
+    zoneSelect.appendChild(o);
+  });
+
+  renderZones();
+  renderMovies();
+  renderNetwork();
+
+  document.getElementById("searchInput").addEventListener("input", renderMovies);
+  zoneSelect.addEventListener("change", e => {
+    selectedZone = e.target.value;
+    renderMovies();
+    renderNetwork();
+  });
+  document.getElementById("showAllBtn").addEventListener("click", () => {
+    selectedZone = "all";
+    zoneSelect.value = "all";
+    document.getElementById("searchInput").value = "";
+    renderMovies();
+    renderNetwork();
+    document.getElementById("explore").scrollIntoView({behavior:"smooth"});
+  });
+
+  const dialog = document.getElementById("movieDialog");
+  document.getElementById("dialogClose").addEventListener("click", () => dialog.close());
+}
+
+function zoneForTag(tag){
+  return DATA.zones.find(z => z.tags.includes(tag));
+}
+
+function zoneTags(zoneName){
+  if(zoneName === "all") return null;
+  const z = DATA.zones.find(z => z.name === zoneName);
+  return z ? z.tags : [];
+}
+
+function filteredMovies(){
+  const q = document.getElementById("searchInput").value.trim().toLowerCase();
+  const tags = zoneTags(selectedZone);
+  return DATA.movies.filter(m => {
+    const zoneOk = !tags || m.tags.some(t => tags.includes(t));
+    const text = [m.title, ...m.tags, ...m.themes].join(" ").toLowerCase();
+    const qOk = !q || text.includes(q);
+    return zoneOk && qOk;
+  });
+}
+
+function renderZones(){
+  const grid = document.getElementById("zoneGrid");
+  grid.innerHTML = "";
+  DATA.zones.forEach(z => {
+    const count = DATA.movies.filter(m => m.tags.some(t => z.tags.includes(t))).length;
+    const el = document.createElement("article");
+    el.className = "zone-card";
+    const zoneImages = {
+      "世界與時代":"zone-world.jpg",
+      "族群與文化":"zone-culture.jpg",
+      "人與關係":"zone-people.jpg",
+      "愛情":"zone-love.jpg",
+      "自我與人生":"zone-self.jpg",
+      "記憶與生命":"zone-memory.jpg",
+      "存在與未知":"zone-existence.jpg",
+      "藝術與表達":"zone-art.jpg"
+    };
+    const cover = zoneImages[z.name] || "cinema-atmosphere-bg.jpg";
+    el.innerHTML = `
+      <button type="button" aria-label="探索${z.name}">
+        <div class="zone-cover">
+          <img src="${cover}" alt="${z.name}區域插圖">
+          <div class="zone-icon">${z.icon}</div>
+        </div>
+        <div class="zone-content">
+          <h3>${z.name}</h3>
+          <p>${z.tags.join("・")}</p>
+          <p class="zone-count">${count} 部電影座標</p>
+        </div>
+      </button>
+    `;
+    el.querySelector("button").addEventListener("click", () => {
+      selectedZone = z.name;
+      document.getElementById("zoneSelect").value = z.name;
+      renderMovies();
+      renderNetwork();
+      document.getElementById("network").scrollIntoView({behavior:"smooth", block:"center"});
+    });
+    grid.appendChild(el);
+  });
+}
+
+function renderMovies(){
+  const grid = document.getElementById("movieGrid");
+  const movies = filteredMovies();
+  document.getElementById("resultCount").textContent = `${movies.length} 部電影`;
+  grid.innerHTML = "";
+  if(!movies.length){
+    grid.innerHTML = `<div class="empty">沒有找到符合條件的電影。試試其他關鍵字或區域。</div>`;
+    return;
+  }
+
+  movies.forEach(m => {
+    const el = document.createElement("article");
+    el.className = "movie-card";
+    el.innerHTML = `
+      <button type="button">
+        <h3>${m.title}</h3>
+        <div class="year">${m.year}</div>
+        <div class="chips">${m.tags.map(t => `<span class="chip">${t}</span>`).join("")}</div>
+      </button>
+    `;
+    el.querySelector("button").addEventListener("click", () => openMovie(m));
+    grid.appendChild(el);
+  });
+}
+
+function renderNetwork(){
+  const box = document.getElementById("network");
+  const movies = filteredMovies().slice(0, 12);
+  if(!movies.length){
+    box.innerHTML = `<div class="empty" style="margin:22px">沒有可顯示的關聯。</div>`;
+    return;
+  }
+  box.innerHTML = `<div class="network-inner"></div>`;
+  const inner = box.querySelector(".network-inner");
+  movies.forEach(m => {
+    const el = document.createElement("div");
+    el.className = "movie-node";
+    const zoneNames = [...new Set(m.tags.map(t => zoneForTag(t)?.name).filter(Boolean))];
+    el.innerHTML = `
+      <strong>${m.title} <small>${m.year}</small></strong>
+      <div class="chips">${zoneNames.map(z => `<span class="chip">${z}</span>`).join("")}</div>
+      <div class="chips" style="margin-top:8px">${m.tags.map(t => `<span class="tag-node">${t}</span>`).join("")}</div>
+    `;
+    inner.appendChild(el);
+  });
+}
+
+function openMovie(m){
+  const dialog = document.getElementById("movieDialog");
+  const content = document.getElementById("dialogContent");
+  const zoneNames = [...new Set(m.tags.map(t => zoneForTag(t)?.name).filter(Boolean))];
+  content.innerHTML = `
+    <p class="eyebrow">${zoneNames.join(" × ")}</p>
+    <h3 class="dialog-title">${m.title}</h3>
+    <p class="dialog-meta">${m.year}</p>
+    <div class="dialog-block">
+      <h4>人生面向</h4>
+      <div class="chips">${m.tags.map(t => `<span class="chip">${t}</span>`).join("")}</div>
+    </div>
+    <div class="dialog-block">
+      <h4>核心關鍵字</h4>
+      <div class="chips">${m.themes.map(t => `<span class="chip">${t}</span>`).join("")}</div>
+    </div>
+    <div class="dialog-block">
+      <h4>這張地圖怎麼看它？</h4>
+      <p style="line-height:1.8;color:var(--muted)">它不是只能被歸進一種類型，而是會同時碰到多個人生問題。之後可以在這裡加入更完整的觀後感、導演資訊與我們自己的解讀。</p>
+    </div>
+  `;
+  dialog.showModal();
+}
+
+init();
+
+document.addEventListener("keydown", (e) => {
+  if (e.key === "Escape") {
+    const dialog = document.getElementById("movieDialog");
+    if (dialog && dialog.open) dialog.close();
+  }
+});
+
+</script>
+</body>
+</html>
